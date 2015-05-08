@@ -20,57 +20,57 @@ import butterknife.InjectView;
 
 public class FreshNewsDetailActivity extends BaseActivity {
 
-	@InjectView(R.id.vp)
-	ViewPager vp;
+    @InjectView(R.id.vp)
+    ViewPager vp;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_fresh_news_detail);
-		ButterKnife.inject(this);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fresh_news_detail);
+        ButterKnife.inject(this);
 
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setDisplayShowTitleEnabled(true);
-		ArrayList<FreshNews> FreshNews = (ArrayList<FreshNews>) getIntent().getSerializableExtra
-				("FreshNews");
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(true);
+        ArrayList<FreshNews> FreshNews = (ArrayList<FreshNews>) getIntent().getSerializableExtra
+                ("FreshNews");
 
-		int position = getIntent().getIntExtra("position", 0);
-		vp.setAdapter(new FreshNewsDetailAdapter(getSupportFragmentManager(), FreshNews));
-		vp.setCurrentItem(position);
+        int position = getIntent().getIntExtra("position", 0);
+        vp.setAdapter(new FreshNewsDetailAdapter(getSupportFragmentManager(), FreshNews));
+        vp.setCurrentItem(position);
 
-	}
-
-
-	private class FreshNewsDetailAdapter extends FragmentPagerAdapter {
-
-		private ArrayList<FreshNews> freshNewses;
-
-		public FreshNewsDetailAdapter(FragmentManager fm, ArrayList<FreshNews> freshNewses) {
-			super(fm);
-			this.freshNewses = freshNewses;
-		}
-
-		@Override
-		public Fragment getItem(int position) {
-			return FreshNewsDetailFragment.getInstance(freshNewses.get(position));
-		}
-
-		@Override
-		public int getCount() {
-			return freshNewses.size();
-		}
-	}
+    }
 
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+    private class FreshNewsDetailAdapter extends FragmentPagerAdapter {
 
-		if (item.getItemId() == android.R.id.home) {
-			finish();
-			return true;
-		}
+        private ArrayList<FreshNews> freshNewses;
 
-		return super.onOptionsItemSelected(item);
-	}
+        public FreshNewsDetailAdapter(FragmentManager fm, ArrayList<FreshNews> freshNewses) {
+            super(fm);
+            this.freshNewses = freshNewses;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return FreshNewsDetailFragment.getInstance(freshNewses.get(position));
+        }
+
+        @Override
+        public int getCount() {
+            return freshNewses.size();
+        }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

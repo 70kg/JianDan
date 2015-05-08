@@ -204,18 +204,16 @@ public class PictureFragment extends BaseFragment {
 		if (item.getItemId() == R.id.action_refresh) {
 			mSwipeRefreshLayout.setRefreshing(true);
 			mAdapter.loadFirst();
+            if (mRecyclerView != null && mAdapter.pictures.size() > 0) {
+                mRecyclerView.scrollToPosition(0);
+            }
 			return true;
 		}
 
 		return false;
 	}
 
-	@Override
-	public void onActionBarClick() {
-		if (mRecyclerView != null && mAdapter.pictures.size() > 0) {
-			mRecyclerView.scrollToPosition(0);
-		}
-	}
+
 
 	public class PictureAdapter extends RecyclerView.Adapter<ViewHolder> {
 

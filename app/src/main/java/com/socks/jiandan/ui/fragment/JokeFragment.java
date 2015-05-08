@@ -128,18 +128,16 @@ public class JokeFragment extends BaseFragment {
 		if (item.getItemId() == R.id.action_refresh) {
 			mSwipeRefreshLayout.setRefreshing(true);
 			mAdapter.loadFirst();
+            if (mRecyclerView != null && mAdapter.mJokes.size() > 0) {
+                mRecyclerView.scrollToPosition(0);
+            }
 			return true;
 		}
 
 		return false;
 	}
 
-	@Override
-	public void onActionBarClick() {
-		if (mRecyclerView != null && mAdapter.mJokes.size() > 0) {
-			mRecyclerView.scrollToPosition(0);
-		}
-	}
+
 
 	public class JokeAdapter extends RecyclerView.Adapter<ViewHolder> {
 

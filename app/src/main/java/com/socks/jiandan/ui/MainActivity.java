@@ -4,9 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -47,16 +49,22 @@ public class MainActivity extends MaterialNavigationDrawer implements Initialabl
     @Override
     public void init(Bundle savedInstanceState) {
         initData();
+
         MaterialAccount account = new MaterialAccount(this.getResources(), "Mr_Wrong丶", "mrwrong12138@gmail.com", R.drawable.logo, R.drawable.mat2);
         this.addAccount(account);
 
-        this.addSection(newSection("新鲜事", R.drawable.ic_explore_white_24dp,new FreshNewsFragment()).setSectionColor(Color.parseColor("#9c27b0")));
-        this.addSection(newSection("无聊图", R.drawable.ic_mood_white_24dp,new PictureFragment()).setSectionColor(Color.parseColor("#9c27b0")));
-        this.addSection(newSection("妹子图", R.drawable.ic_local_florist_white_24dp,new SisterFragment()).setSectionColor(Color.parseColor("#9c27b0")));
-        this.addSection(newSection("段子", R.drawable.ic_chat_white_24dp,new JokeFragment()).setSectionColor(Color.parseColor("#9c27b0")));
-        this.addSection(newSection("小电影", R.drawable.ic_movie_white_24dp,new VideoFragment()).setSectionColor(Color.parseColor("#9c27b0")));
+        this.addSection(newSection("新鲜事", R.drawable.ic_explore_white_24dp, new FreshNewsFragment()).setSectionColor(Color.parseColor("#9c27b0")));
+        this.addSection(newSection("无聊图", R.drawable.ic_mood_white_24dp, new PictureFragment()).setSectionColor(Color.parseColor("#9c27b0")));
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sp.getBoolean(SettingFragment.ENABLE_SISTER, false) && this.getSectionList().size() == 2) {//想要显示妹子图
+            this.addSection(newSection("妹子图", R.drawable.ic_local_florist_white_24dp, new SisterFragment()).setSectionColor(Color.parseColor("#9c27b0")));
+        } else if (this.getSectionByTitle("妹子图") != null && !sp.getBoolean(SettingFragment.ENABLE_SISTER, false)) {
+            this.removeSection(getSectionByTitle("妹子图"));
+        }
+        this.addSection(newSection("段子", R.drawable.ic_chat_white_24dp, new JokeFragment()).setSectionColor(Color.parseColor("#9c27b0")));
+        this.addSection(newSection("小电影", R.drawable.ic_movie_white_24dp, new VideoFragment()).setSectionColor(Color.parseColor("#9c27b0")));
 
-        this.addBottomSection(newSection("设置",R.drawable.ic_settings_white_24dp,new SettingFragment()));
+        this.addBottomSection(newSection("设置", R.drawable.ic_settings_white_24dp, new SettingFragment()));
     }
 //	@Override
 //	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +73,12 @@ public class MainActivity extends MaterialNavigationDrawer implements Initialabl
 //		//initView();
 //		initData();
 //	}
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
     @Override
     public void initView() {

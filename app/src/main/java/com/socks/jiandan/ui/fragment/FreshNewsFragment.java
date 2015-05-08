@@ -153,18 +153,15 @@ public class FreshNewsFragment extends Fragment {
 		if (item.getItemId() == R.id.action_refresh) {
 			mSwipeRefreshLayout.setRefreshing(true);
 			mAdapter.loadFirst();
+            if (mRecyclerView != null && mAdapter.freshNewses.size() > 0) {
+                mRecyclerView.scrollToPosition(0);
+            }
 			return true;
 		}
 
 		return false;
 	}
 
-//	@Override
-//	public void onActionBarClick() {
-//		if (mRecyclerView != null && mAdapter.freshNewses.size() > 0) {
-//			mRecyclerView.scrollToPosition(0);
-//		}
-//	}
 
 	/**
 	 * 新鲜事适配器

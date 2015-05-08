@@ -56,9 +56,9 @@ public class VideoDetailActivity extends BaseActivity implements View.OnClickLis
 
 		final ActionBar actionBar = getSupportActionBar();
 
-		actionBar.setDisplayShowHomeEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setTitle("加载中...");
+//		actionBar.setDisplayShowHomeEnabled(true);
+//		actionBar.setDisplayHomeAsUpEnabled(true);
+//		actionBar.setTitle("加载中...");
 
 		imgBtn_back.setOnClickListener(this);
 		imgBtn_forward.setOnClickListener(this);
