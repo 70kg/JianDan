@@ -2,6 +2,7 @@ package com.socks.jiandan.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -52,7 +53,16 @@ public class ShowMaxImageView extends ImageView {
 		super.setImageDrawable(drawable);
 		requestLayout();
 	}
+    private static Activity scanForActivity(Context cont) {
+        if (cont == null)
+            return null;
+        else if (cont instanceof Activity)
+            return (Activity)cont;
+        else if (cont instanceof ContextWrapper)
+            return scanForActivity(((ContextWrapper)cont).getBaseContext());
 
+        return null;
+    }
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -63,8 +73,8 @@ public class ShowMaxImageView extends ImageView {
 
 			int resultHeight = (int) Math.max(mHeight, sizeHeight);
 
-			if (resultHeight >= ScreenSizeUtil.getScreenHeight((Activity) getContext())) {
-				resultHeight = ScreenSizeUtil.getScreenHeight((Activity) getContext()) / 3;
+			if (resultHeight >= ScreenSizeUtil.getScreenHeight(scanForActivity(this.getContext()))) {
+				resultHeight = ScreenSizeUtil.getScreenHeight(scanForActivity(this.getContext()))/ 3;
 			}
 
 			setMeasuredDimension(sizeWidth, resultHeight);

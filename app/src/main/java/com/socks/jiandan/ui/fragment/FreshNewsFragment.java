@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,16 +23,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socks.jiandan.R;
-import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.FreshNews;
 import com.socks.jiandan.net.Request4FreshNews;
+import com.socks.jiandan.net.RequestManager;
 import com.socks.jiandan.ui.FreshNewsDetailActivity;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
@@ -47,7 +49,7 @@ import butterknife.InjectView;
  * 新鲜事碎片
  * Created by zhaokaiqiang on 15/4/24.
  */
-public class FreshNewsFragment extends BaseFragment {
+public class FreshNewsFragment extends Fragment {
 
 
 	@InjectView(R.id.recycler_view)
@@ -71,7 +73,7 @@ public class FreshNewsFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mActionBar.setTitle("新鲜事");
+		//mActionBar.setTitle("新鲜事");
 	}
 
 	@Override
@@ -157,12 +159,12 @@ public class FreshNewsFragment extends BaseFragment {
 		return false;
 	}
 
-	@Override
-	public void onActionBarClick() {
-		if (mRecyclerView != null && mAdapter.freshNewses.size() > 0) {
-			mRecyclerView.scrollToPosition(0);
-		}
-	}
+//	@Override
+//	public void onActionBarClick() {
+//		if (mRecyclerView != null && mAdapter.freshNewses.size() > 0) {
+//			mRecyclerView.scrollToPosition(0);
+//		}
+//	}
 
 	/**
 	 * 新鲜事适配器
@@ -273,6 +275,7 @@ public class FreshNewsFragment extends BaseFragment {
 		}
 
 		private void loadData() {
+
 			executeRequest(new Request4FreshNews(FreshNews.getUrlFreshNews(page),
 					new Response.Listener<ArrayList<FreshNews>>() {
 						@Override
@@ -337,4 +340,7 @@ public class FreshNewsFragment extends BaseFragment {
 
 		}
 	}
+    protected void executeRequest(Request request) {
+        RequestManager.addRequest(request, this);
+    }
 }

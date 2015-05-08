@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -13,10 +12,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -25,191 +22,212 @@ import com.socks.jiandan.R;
 import com.socks.jiandan.base.Initialable;
 import com.socks.jiandan.model.NetWorkEvent;
 import com.socks.jiandan.ui.fragment.FreshNewsFragment;
+import com.socks.jiandan.ui.fragment.JokeFragment;
 import com.socks.jiandan.ui.fragment.MainMenuFragment;
+import com.socks.jiandan.ui.fragment.PictureFragment;
+import com.socks.jiandan.ui.fragment.SettingFragment;
+import com.socks.jiandan.ui.fragment.SisterFragment;
+import com.socks.jiandan.ui.fragment.VideoFragment;
 import com.socks.jiandan.utils.AppManager;
 import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ScreenSizeUtil;
 import com.socks.jiandan.utils.ShowToast;
 
 import de.greenrobot.event.EventBus;
+import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
+import it.neokree.materialnavigationdrawer.elements.MaterialAccount;
 
-public class MainActivity extends ActionBarActivity implements Initialable {
+public class MainActivity extends MaterialNavigationDrawer implements Initialable {
 
-	private DrawerLayout mDrawerLayout;
-	private ActionBarDrawerToggle mActionBarDrawerToggle;
-	private BroadcastReceiver netStateReceiver;
-	private MaterialDialog noNetWorkDialog;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
+    private BroadcastReceiver netStateReceiver;
+    private MaterialDialog noNetWorkDialog;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		initView();
-		initData();
-	}
+    @Override
+    public void init(Bundle savedInstanceState) {
+        initData();
+        MaterialAccount account = new MaterialAccount(this.getResources(), "Mr_Wrong丶", "mrwrong12138@gmail.com", R.drawable.logo, R.drawable.mat2);
+        this.addAccount(account);
 
-	@Override
-	public void initView() {
+        this.addSection(newSection("新鲜事", R.drawable.ic_explore_white_24dp,new FreshNewsFragment()).setSectionColor(Color.parseColor("#9c27b0")));
+        this.addSection(newSection("无聊图", R.drawable.ic_mood_white_24dp,new PictureFragment()).setSectionColor(Color.parseColor("#9c27b0")));
+        this.addSection(newSection("妹子图", R.drawable.ic_local_florist_white_24dp,new SisterFragment()).setSectionColor(Color.parseColor("#9c27b0")));
+        this.addSection(newSection("段子", R.drawable.ic_chat_white_24dp,new JokeFragment()).setSectionColor(Color.parseColor("#9c27b0")));
+        this.addSection(newSection("小电影", R.drawable.ic_movie_white_24dp,new VideoFragment()).setSectionColor(Color.parseColor("#9c27b0")));
 
-		//为ActionBar添加点击事件
-		LinearLayout linearLayout = new LinearLayout(this);
-		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ScreenSizeUtil.getScreenWidth
-				(this) * 1 / 2,
-				LinearLayout.LayoutParams.MATCH_PARENT));
-		linearLayout.setBackgroundColor(Color.TRANSPARENT);
+        this.addBottomSection(newSection("设置",R.drawable.ic_settings_white_24dp,new SettingFragment()));
+    }
+//	@Override
+//	protected void onCreate(Bundle savedInstanceState) {
+//		super.onCreate(savedInstanceState);
+//		setContentView(R.layout.activity_main);
+//		//initView();
+//		initData();
+//	}
 
-		ActionBar mActionBar = getSupportActionBar();
-		mActionBar.setCustomView(linearLayout);
-		mActionBar.setDisplayShowCustomEnabled(true);
-		mActionBar.setDisplayShowTitleEnabled(true);
-		mActionBar.setDisplayHomeAsUpEnabled(true);
+    @Override
+    public void initView() {
 
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name,
-				R.string.app_name) {
+        //为ActionBar添加点击事件
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ScreenSizeUtil.getScreenWidth
+                (this) * 1 / 2,
+                LinearLayout.LayoutParams.MATCH_PARENT));
+        linearLayout.setBackgroundColor(Color.TRANSPARENT);
 
-			@Override
-			public void onDrawerClosed(View drawerView) {
-				invalidateOptionsMenu();
-			}
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setCustomView(linearLayout);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        mActionBar.setDisplayShowTitleEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
-			@Override
-			public void onDrawerOpened(View drawerView) {
-				invalidateOptionsMenu();
-			}
-		};
-		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name,
+                R.string.app_name) {
 
-		replaceFragment(R.id.frame_container, new FreshNewsFragment());
-		replaceFragment(R.id.drawer_container, new MainMenuFragment());
-	}
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                invalidateOptionsMenu();
+            }
 
-	@Override
-	public void initData() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                invalidateOptionsMenu();
+            }
+        };
+        mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-		netStateReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				if (intent.getAction().equals(
-						ConnectivityManager.CONNECTIVITY_ACTION)) {
-					if (NetWorkUtil.isNetWorkConnected(MainActivity.this)) {
-						EventBus.getDefault().post(new NetWorkEvent(NetWorkEvent.AVAILABLE));
-					} else {
-						EventBus.getDefault().post(new NetWorkEvent(NetWorkEvent.UNAVAILABLE));
-					}
-				}
-			}
-		};
+        replaceFragment(R.id.frame_container, new FreshNewsFragment());
+        replaceFragment(R.id.drawer_container, new MainMenuFragment());
+    }
 
-		//注册网络状态广播接受者
-		registerReceiver(netStateReceiver, new IntentFilter(
-				ConnectivityManager.CONNECTIVITY_ACTION));
+    @Override
+    public void initData() {
 
-	}
+        netStateReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(
+                        ConnectivityManager.CONNECTIVITY_ACTION)) {
+                    if (NetWorkUtil.isNetWorkConnected(MainActivity.this)) {
+                        EventBus.getDefault().post(new NetWorkEvent(NetWorkEvent.AVAILABLE));
+                    } else {
+                        EventBus.getDefault().post(new NetWorkEvent(NetWorkEvent.UNAVAILABLE));
+                    }
+                }
+            }
+        };
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		EventBus.getDefault().register(this);
-	}
+        //注册网络状态广播接受者
+        registerReceiver(netStateReceiver, new IntentFilter(
+                ConnectivityManager.CONNECTIVITY_ACTION));
 
-	public void onEvent(NetWorkEvent event) {
+    }
 
-		if (event.getType() == NetWorkEvent.UNAVAILABLE) {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
-			if (noNetWorkDialog == null) {
-				noNetWorkDialog = new MaterialDialog.Builder(MainActivity.this)
-						.title("无网络连接")
-						.content("去开启网络?")
-						.positiveText("是")
-						.negativeText("否")
-						.callback(new MaterialDialog.ButtonCallback() {
-							@Override
-							public void onPositive(MaterialDialog dialog) {
-								Intent intent = new Intent(
-										Settings.ACTION_WIRELESS_SETTINGS);
-								startActivity(intent);
-							}
+    public void onEvent(NetWorkEvent event) {
 
-							@Override
-							public void onNegative(MaterialDialog dialog) {
-							}
-						})
-						.cancelable(false)
-						.build();
-			}
+        if (event.getType() == NetWorkEvent.UNAVAILABLE) {
 
-			if (!noNetWorkDialog.isShowing()) {
-				noNetWorkDialog.show();
-			}
+            if (noNetWorkDialog == null) {
+                noNetWorkDialog = new MaterialDialog.Builder(MainActivity.this)
+                        .title("无网络连接")
+                        .content("去开启网络?")
+                        .positiveText("是")
+                        .negativeText("否")
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                Intent intent = new Intent(
+                                        Settings.ACTION_WIRELESS_SETTINGS);
+                                startActivity(intent);
+                            }
 
-		}
+                            @Override
+                            public void onNegative(MaterialDialog dialog) {
+                            }
+                        })
+                        .cancelable(false)
+                        .build();
+            }
 
-	}
+            if (!noNetWorkDialog.isShowing()) {
+                noNetWorkDialog.show();
+            }
 
+        }
 
-	public void replaceFragment(int id_content, Fragment fragment) {
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.replace(id_content, fragment);
-		transaction.commit();
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-		mActionBarDrawerToggle.syncState();
-	}
-
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		mActionBarDrawerToggle.onConfigurationChanged(newConfig);
-	}
-
-	public void closeDrawer() {
-		mDrawerLayout.closeDrawers();
-	}
+    }
 
 
-	// 用来计算返回键的点击间隔时间
-	private long exitTime = 0;
+    public void replaceFragment(int id_content, Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(id_content, fragment);
+        transaction.commit();
+    }
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK
-				&& event.getAction() == KeyEvent.ACTION_DOWN) {
-			if ((System.currentTimeMillis() - exitTime) > 2000) {
-				ShowToast.Short("再按一次退出程序");
-				exitTime = System.currentTimeMillis();
-			} else {
-				AppManager.getAppManager().finishAllActivityAndExit(this);
-				finish();
-			}
-			return true;
-		}
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
-		return super.onKeyDown(keyCode, event);
-	}
+//    @Override
+//    protected void onPostCreate(Bundle savedInstanceState) {
+//        super.onPostCreate(savedInstanceState);
+//        mActionBarDrawerToggle.syncState();
+//    }
 
-	@Override
-	protected void onStop() {
-		super.onStop();
-		EventBus.getDefault().unregister(this);
-	}
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
+//    }
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		unregisterReceiver(netStateReceiver);
-	}
+    public void closeDrawer() {
+        mDrawerLayout.closeDrawers();
+    }
+
+
+    // 用来计算返回键的点击间隔时间
+    private long exitTime = 0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                ShowToast.Short("再按一次退出程序");
+                exitTime = System.currentTimeMillis();
+            } else {
+                AppManager.getAppManager().finishAllActivityAndExit(this);
+                finish();
+            }
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(netStateReceiver);
+    }
 }

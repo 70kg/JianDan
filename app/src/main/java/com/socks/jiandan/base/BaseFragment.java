@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.socks.jiandan.net.RequestManager;
-import com.socks.jiandan.ui.MainActivity;
 import com.socks.jiandan.utils.ShowToast;
 
 
@@ -29,15 +27,15 @@ public abstract class BaseFragment extends Fragment {
 		ActionBarActivity actionBarActivity = (ActionBarActivity) getActivity();
 		mActionBar = actionBarActivity.getSupportActionBar();
 
-		if (activity instanceof MainActivity) {
-			mActionBar.getCustomView()
-					.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							onActionBarClick();
-						}
-					});
-		}
+//		if (activity instanceof MainActivity) {
+//			mActionBar.getCustomView()
+//					.setOnClickListener(new View.OnClickListener() {
+//						@Override
+//						public void onClick(View v) {
+//							onActionBarClick();
+//						}
+//					});
+//		}
 
 	}
 
