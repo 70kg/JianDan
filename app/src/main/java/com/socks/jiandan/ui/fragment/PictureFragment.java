@@ -93,7 +93,7 @@ public class PictureFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mActionBar.setTitle("无聊图");
+		//mActionBar.setTitle("无聊图");
 		isFirstChange = true;
 	}
 

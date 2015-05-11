@@ -299,7 +299,18 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 	 */
 	private void showImgInWebView(final String s) {
 		if (webView != null) {
-			webView.loadDataWithBaseURL("", "<!doctype html> <html lang=\"en\"> <head> <meta charset=\"UTF-8\"> <title></title><style type=\"text/css\"> html,body{width:100%;height:100%;margin:0;padding:0;background-color:black;} *{ -webkit-tap-highlight-color: rgba(0, 0, 0, 0);}#box{ width:100%;height:100%; display:table; text-align:center; background-color:black;} body{-webkit-user-select: none;user-select: none;-khtml-user-select: none;}#box span{ display:table-cell; vertical-align:middle;} #box img{  width:100%;} </style> </head> <body> <div id=\"box\"><span><img src=\"img_url\" alt=\"\"></span></div> <script type=\"text/javascript\" >document.body.onclick=function(e){window.external.onClick();e.preventDefault(); };function load_img(){var url=document.getElementsByTagName(\"img\")[0];url=url.getAttribute(\"src\");var img=new Image();img.src=url;if(img.complete){\twindow.external.img_has_loaded();\treturn;};img.onload=function(){window.external.img_has_loaded();};img.onerror=function(){\twindow.external.img_loaded_error();};};load_img();</script></body> </html>".replace("img_url", s), "text/html", "utf-8", "");
+			webView.loadDataWithBaseURL("", ("<!doctype html> <html lang=\"en\">" +
+                    " <head> <meta charset=\"UTF-8\"> <title></title><style type=\"text/css\">" +
+                    " html,body{width:100%;height:100%;margin:0;padding:0;background-color:black;}" +
+                    " *{ -webkit-tap-highlight-color: rgba(0, 0, 0, 0);}#box{ width:100%;height:100%; " +
+                    "display:table; text-align:center; background-color:black;} body{-webkit-user-select: " +
+                    "none;user-select: none;-khtml-user-select: none;}#box span{ display:table-cell; vertical-align:middle;} #box img{  width:100%;}" +
+                    " </style> </head> <body> <div id=\"box\"><span><img src=\"img_url\" alt=\"\"></span></div> " +
+                    "<script type=\"text/javascript\" >document.body.onclick=function(e){window.external.onClick();e.preventDefault(); };" +
+                    "function load_img(){var url=document.getElementsByTagName(\"img\")[0];url=url.getAttribute(\"src\");" +
+                    "var img=new Image();img.src=url;if(img.complete){\twindow.external.img_has_loaded();\treturn;};" +
+                    "img.onload=function(){window.external.img_has_loaded();};img.onerror=function(){\twindow.external.img_loaded_error();};};" +
+                    "load_img();</script></body> </html>").replace("img_url", s), "text/html", "utf-8", "");
 		}
 	}
 

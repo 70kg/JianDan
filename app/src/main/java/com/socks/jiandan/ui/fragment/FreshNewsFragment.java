@@ -233,6 +233,7 @@ public class FreshNewsFragment extends Fragment {
 				holder.card.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
+                        //---------点击事件触发
 						Intent intent = new Intent(getActivity(), FreshNewsDetailActivity.class);
 						intent.putExtra("FreshNews", freshNewses);
 						intent.putExtra("position", position);

@@ -5,11 +5,14 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +37,7 @@ import com.socks.jiandan.net.Request4CommentList;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
 import com.socks.jiandan.utils.SwipeBackUtil;
+import com.socks.jiandan.utils.SystemBarTintManager;
 import com.socks.jiandan.view.floorview.FloorView;
 import com.socks.jiandan.view.floorview.SubComments;
 import com.socks.jiandan.view.floorview.SubFloorFactory;
@@ -74,6 +78,11 @@ public class CommentListActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_comment_list);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintColor(getResources().getColor(R.color.StatusBarColor));
+        }
 		initView();
 		initData();
 
@@ -83,10 +92,12 @@ public class CommentListActivity extends BaseActivity {
 	public void initView() {
 
 		ButterKnife.inject(this);
-
-//		ActionBar actionBar = getSupportActionBar();
-//		actionBar.setDisplayHomeAsUpEnabled(true);
-//		actionBar.setDisplayShowHomeEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("评论详情");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(true);
 
 		mSwipeBackUtil = new SwipeBackUtil(this);
 

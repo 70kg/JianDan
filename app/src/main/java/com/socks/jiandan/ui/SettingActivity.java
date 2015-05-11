@@ -1,6 +1,8 @@
 package com.socks.jiandan.ui;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.socks.jiandan.R;
@@ -17,15 +19,20 @@ public class SettingActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
-
-//		ActionBar actionBar = getSupportActionBar();
-//
-//		actionBar.setDisplayShowHomeEnabled(true);
-//		actionBar.setDisplayHomeAsUpEnabled(true);
-//		actionBar.setDisplayShowTitleEnabled(false);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//            tintManager.setStatusBarTintEnabled(true);
+//            tintManager.setStatusBarTintColor(getResources().getColor(R.color.StatusBarColor));
+//        }
+		 Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("设置");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(true);
 
 		getFragmentManager().beginTransaction()
-				.replace(android.R.id.content, new SettingFragment())
+				.replace(R.id.setting_container, new SettingFragment())
 				.commit();
 	}
 

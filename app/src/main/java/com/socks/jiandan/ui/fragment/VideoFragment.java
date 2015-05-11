@@ -78,7 +78,7 @@ public class VideoFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mActionBar.setTitle("小视频");
+        //mActionBar.setTitle("小视频");
     }
 
     @Override

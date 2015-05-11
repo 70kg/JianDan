@@ -94,7 +94,7 @@ public class SisterFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mActionBar.setTitle("妹子图");
+       // mActionBar.setTitle("妹子图");
         isFirstChange = true;
     }
 

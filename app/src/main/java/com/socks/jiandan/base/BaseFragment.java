@@ -3,8 +3,6 @@ package com.socks.jiandan.base;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -18,14 +16,14 @@ import com.socks.jiandan.utils.ShowToast;
  */
 public abstract class BaseFragment extends Fragment {
 
-	protected ActionBar mActionBar;
+	protected android.support.v7.app.ActionBar mActionBar;
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 
-		ActionBarActivity actionBarActivity = (ActionBarActivity) getActivity();
-		mActionBar = actionBarActivity.getSupportActionBar();
+//		ActionBarActivity actionBarActivity = (ActionBarActivity) getActivity();
+//		mActionBar = actionBarActivity.getSupportActionBar();
 
 //		if (activity instanceof MainActivity) {
 //			mActionBar.getCustomView()

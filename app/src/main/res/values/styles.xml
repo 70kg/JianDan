@@ -33,9 +33,19 @@
     </style>
 
     <!-- 新鲜事详情页-->
-    <style name="FreshNewsDetailActivityTheme" parent="@style/AppTheme">
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="windowActionBarOverlay">true</item>
+    <style name="FreshNewsDetailActivityTheme" parent="Theme.AppCompat.NoActionBar">
+        <!--<item name="colorPrimary">#9c27b0</item>-->
+        <!--<item name="colorPrimaryDark">#9c27b0</item>-->
+        <!--<item name="colorAccent">#9c27b0</item>-->
+
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <!-- toolbar（actionbar）颜色 -->
+        <item name="colorPrimary">#673AB7</item>
+        <!-- 窗口的背景颜色 -->
+        <item name="colorPrimaryDark">@android:color/holo_blue_bright</item>
+        <!-- 窗口的背景颜色 -->
+
     </style>
 
 </resources>

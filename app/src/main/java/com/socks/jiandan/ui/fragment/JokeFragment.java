@@ -70,7 +70,7 @@ public class JokeFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mActionBar.setTitle("段子");
+		//mActionBar.setTitle("段子");
 	}
 
 	@Override

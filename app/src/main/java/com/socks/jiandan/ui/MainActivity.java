@@ -64,7 +64,7 @@ public class MainActivity extends MaterialNavigationDrawer implements Initialabl
         this.addSection(newSection("段子", R.drawable.ic_chat_white_24dp, new JokeFragment()).setSectionColor(Color.parseColor("#9c27b0")));
         this.addSection(newSection("小电影", R.drawable.ic_movie_white_24dp, new VideoFragment()).setSectionColor(Color.parseColor("#9c27b0")));
 
-        this.addBottomSection(newSection("设置", R.drawable.ic_settings_white_24dp, new SettingFragment()));
+        this.addBottomSection(newSection("设置", R.drawable.ic_settings_white_24dp, new Intent(this,SettingActivity.class)));
     }
 //	@Override
 //	protected void onCreate(Bundle savedInstanceState) {

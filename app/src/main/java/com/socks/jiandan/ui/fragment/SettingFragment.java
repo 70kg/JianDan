@@ -98,8 +98,8 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 			MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
 					.title("煎蛋增强版")
 					.content("本项目开源吖，你想怎么改？快来联系我~")
-					.positiveText("GITHUB")
-					.negativeText("WeiBo")
+					.positiveText("GITHUB").positiveColor(R.color.black)
+					.negativeText("WeiBo").negativeColor(R.color.black)
 					.callback(new MaterialDialog.ButtonCallback() {
 						@Override
 						public void onPositive(MaterialDialog dialog) {

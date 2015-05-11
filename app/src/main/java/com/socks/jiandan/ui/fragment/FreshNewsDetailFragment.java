@@ -1,11 +1,7 @@
 package com.socks.jiandan.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -16,8 +12,6 @@ import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.model.FreshNews;
 import com.socks.jiandan.net.Request4FreshNewsDetail;
-import com.socks.jiandan.ui.CommentList4FreshNewsActivity;
-import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.String2TimeUtil;
 
 import butterknife.ButterKnife;
@@ -55,7 +49,7 @@ public class FreshNewsDetailFragment extends BaseFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		setHasOptionsMenu(true);
+		//setHasOptionsMenu(true);
 
 		freshNews = (FreshNews) getArguments().getSerializable("FreshNews");
 
@@ -130,25 +124,25 @@ public class FreshNewsDetailFragment extends BaseFragment {
 	}
 
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.menu_fresh_news_detail, menu);
-	}
+//	@Override
+//	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//		inflater.inflate(R.menu.menu_fresh_news_detail, menu);
+//	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		switch (item.getItemId()) {
-			case R.id.action_comment:
-				Intent intent = new Intent(getActivity(), CommentList4FreshNewsActivity.class);
-				intent.putExtra("id", freshNews.getId());
-				startActivity(intent);
-				return true;
-			case R.id.action_share:
-				ShareUtil.shareText(getActivity(), freshNews.getTitle() + " " + freshNews.getUrl());
-				return true;
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//
+//		switch (item.getItemId()) {
+//			case R.id.action_comment:
+//				Intent intent = new Intent(getActivity(), CommentList4FreshNewsActivity.class);
+//				intent.putExtra("id", freshNews.getId());
+//				startActivity(intent);
+//				return true;
+//			case R.id.action_share:
+//				ShareUtil.shareText(getActivity(), freshNews.getTitle() + " " + freshNews.getUrl());
+//				return true;
+//		}
+//
+//		return super.onOptionsItemSelected(item);
+//	}
 }
