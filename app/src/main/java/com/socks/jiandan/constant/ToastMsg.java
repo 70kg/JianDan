@@ -30,5 +30,5 @@ public class ToastMsg {
 	public static final String VOTE_OO = "顶的好舒服~";
 
 	public static final String VOTE_REPEAT = "投过票了";
-
+    public static final String LOAD_NO_NETWORK = "无网络，当前为缓存数据";
 }

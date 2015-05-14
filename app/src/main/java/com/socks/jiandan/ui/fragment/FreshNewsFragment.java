@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,18 +22,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socks.jiandan.R;
+import com.socks.jiandan.base.BaseFragment;
+import com.socks.jiandan.cache.FreshNewsCacheUtil;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.FreshNews;
+import com.socks.jiandan.net.JSONParser;
 import com.socks.jiandan.net.Request4FreshNews;
-import com.socks.jiandan.net.RequestManager;
 import com.socks.jiandan.ui.FreshNewsDetailActivity;
+import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
@@ -49,7 +50,7 @@ import butterknife.InjectView;
  * 新鲜事碎片
  * Created by zhaokaiqiang on 15/4/24.
  */
-public class FreshNewsFragment extends Fragment {
+public class FreshNewsFragment extends BaseFragment {
 
 
 	@InjectView(R.id.recycler_view)
@@ -73,7 +74,7 @@ public class FreshNewsFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		//mActionBar.setTitle("新鲜事");
+
 	}
 
 	@Override
@@ -153,15 +154,18 @@ public class FreshNewsFragment extends Fragment {
 		if (item.getItemId() == R.id.action_refresh) {
 			mSwipeRefreshLayout.setRefreshing(true);
 			mAdapter.loadFirst();
-            if (mRecyclerView != null && mAdapter.freshNewses.size() > 0) {
-                mRecyclerView.scrollToPosition(0);
-            }
 			return true;
 		}
 
 		return false;
 	}
 
+	@Override
+	public void onActionBarClick() {
+		if (mRecyclerView != null && mAdapter.mFreshNews.size() > 0) {
+			mRecyclerView.scrollToPosition(0);
+		}
+	}
 
 	/**
 	 * 新鲜事适配器
@@ -169,11 +173,11 @@ public class FreshNewsFragment extends Fragment {
 	public class FreshNewsAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 		private int page;
-		private ArrayList<FreshNews> freshNewses;
+		private ArrayList<FreshNews> mFreshNews;
 		private int lastPosition = -1;
 
 		public FreshNewsAdapter() {
-			freshNewses = new ArrayList<FreshNews>();
+			mFreshNews = new ArrayList<FreshNews>();
 		}
 
 		private void setAnimation(View viewToAnimate, int position) {
@@ -214,7 +218,7 @@ public class FreshNewsFragment extends Fragment {
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-			final FreshNews freshNews = freshNewses.get(position);
+			final FreshNews freshNews = mFreshNews.get(position);
 			imageLoader.displayImage(freshNews.getCustomFields().getThumb_m(), holder.img, options);
 			holder.tv_title.setText(freshNews.getTitle());
 			holder.tv_info.setText(freshNews.getAuthor().getName() + "@" + freshNews.getTags()
@@ -233,9 +237,8 @@ public class FreshNewsFragment extends Fragment {
 				holder.card.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-                        //---------点击事件触发
 						Intent intent = new Intent(getActivity(), FreshNewsDetailActivity.class);
-						intent.putExtra("FreshNews", freshNewses);
+						intent.putExtra("FreshNews", mFreshNews);
 						intent.putExtra("position", position);
 						startActivity(intent);
 					}
@@ -247,7 +250,7 @@ public class FreshNewsFragment extends Fragment {
 					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent(getActivity(), FreshNewsDetailActivity.class);
-						intent.putExtra("FreshNews", freshNewses);
+						intent.putExtra("FreshNews", mFreshNews);
 						intent.putExtra("position", position);
 						startActivity(intent);
 					}
@@ -259,57 +262,77 @@ public class FreshNewsFragment extends Fragment {
 
 		@Override
 		public int getItemCount() {
-			return freshNewses.size();
+			return mFreshNews.size();
 		}
 
 		public void loadFirst() {
 			page = 1;
-			loadData();
+			loadDataByNetworkType();
 		}
 
 		public void loadNextPage() {
 			page++;
-			loadData();
+			loadDataByNetworkType();
 		}
 
-		private void loadData() {
+		private void loadDataByNetworkType() {
 
-			executeRequest(new Request4FreshNews(FreshNews.getUrlFreshNews(page),
-					new Response.Listener<ArrayList<FreshNews>>() {
-						@Override
-						public void onResponse(ArrayList<FreshNews> response) {
-							google_progress.setVisibility(View.GONE);
+			if (NetWorkUtil.isNetWorkConnected(getActivity())) {
+				executeRequest(new Request4FreshNews(FreshNews.getUrlFreshNews(page),
+						new Response.Listener<ArrayList<FreshNews>>() {
+							@Override
+							public void onResponse(ArrayList<FreshNews> response) {
 
-							if (page == 1) {
-								mAdapter.freshNewses.clear();
-								mAdapter.freshNewses.addAll(response);
-							} else {
-								mAdapter.freshNewses.addAll(response);
+								google_progress.setVisibility(View.GONE);
+								mLoadFinisCallBack.loadFinish(null);
+								if (mSwipeRefreshLayout.isRefreshing()) {
+									mSwipeRefreshLayout.setRefreshing(false);
+								}
+
+								if (page == 1) {
+									mAdapter.mFreshNews.clear();
+									FreshNewsCacheUtil.getInstance(getActivity()).clearAllCache();
+								}
+
+								mAdapter.mFreshNews.addAll(response);
+								notifyDataSetChanged();
+
+								FreshNewsCacheUtil.getInstance(getActivity()).addResultCache(JSONParser.toString(response),
+										page);
+
 							}
+						}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError error) {
 
-							notifyDataSetChanged();
-
-							if (mSwipeRefreshLayout.isRefreshing()) {
-								mSwipeRefreshLayout.setRefreshing(false);
-							}
-
-							mLoadFinisCallBack.loadFinish(null);
+						ShowToast.Short(ToastMsg.LOAD_FAILED);
+						google_progress.setVisibility(View.GONE);
+						mLoadFinisCallBack.loadFinish(null);
+						if (mSwipeRefreshLayout.isRefreshing()) {
+							mSwipeRefreshLayout.setRefreshing(false);
 						}
-					}, new Response.ErrorListener() {
-				@Override
-				public void onErrorResponse(VolleyError error) {
-
-					ShowToast.Short(ToastMsg.LOAD_FAILED);
-					google_progress.setVisibility(View.GONE);
-					mLoadFinisCallBack.loadFinish(null);
-					if (mSwipeRefreshLayout.isRefreshing()) {
-						mSwipeRefreshLayout.setRefreshing(false);
 					}
+				}));
+			} else {
+				google_progress.setVisibility(View.GONE);
+				mLoadFinisCallBack.loadFinish(null);
+				if (mSwipeRefreshLayout.isRefreshing()) {
+					mSwipeRefreshLayout.setRefreshing(false);
 				}
-			}));
+
+				if (page == 1) {
+					mFreshNews.clear();
+					ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
+				}
+
+				mFreshNews.addAll(FreshNewsCacheUtil.getInstance(getActivity()).getCacheByPage(page));
+				notifyDataSetChanged();
+			}
+
 		}
 
 	}
+
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -338,7 +361,6 @@ public class FreshNewsFragment extends Fragment {
 
 		}
 	}
-    protected void executeRequest(Request request) {
-        RequestManager.addRequest(request, this);
-    }
+
+
 }

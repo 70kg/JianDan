@@ -66,23 +66,8 @@ public class MainActivity extends MaterialNavigationDrawer implements Initialabl
 
         this.addBottomSection(newSection("设置", R.drawable.ic_settings_white_24dp, new Intent(this,SettingActivity.class)));
     }
-//	@Override
-//	protected void onCreate(Bundle savedInstanceState) {
-//		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_main);
-//		//initView();
-//		initData();
-//	}
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
     @Override
     public void initView() {
-
         //为ActionBar添加点击事件
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ScreenSizeUtil.getScreenWidth
@@ -118,7 +103,6 @@ public class MainActivity extends MaterialNavigationDrawer implements Initialabl
 
     @Override
     public void initData() {
-
         netStateReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -138,7 +122,6 @@ public class MainActivity extends MaterialNavigationDrawer implements Initialabl
                 ConnectivityManager.CONNECTIVITY_ACTION));
 
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -153,8 +136,8 @@ public class MainActivity extends MaterialNavigationDrawer implements Initialabl
                 noNetWorkDialog = new MaterialDialog.Builder(MainActivity.this)
                         .title("无网络连接")
                         .content("去开启网络?")
-                        .positiveText("是")
-                        .negativeText("否")
+                        .positiveText("是").positiveColor(R.color.black)
+                        .negativeText("否").negativeColor(R.color.black)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
@@ -170,48 +153,19 @@ public class MainActivity extends MaterialNavigationDrawer implements Initialabl
                         .cancelable(false)
                         .build();
             }
-
             if (!noNetWorkDialog.isShowing()) {
                 noNetWorkDialog.show();
             }
-
         }
-
     }
-
-
     public void replaceFragment(int id_content, Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(id_content, fragment);
         transaction.commit();
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-//    @Override
-//    protected void onPostCreate(Bundle savedInstanceState) {
-//        super.onPostCreate(savedInstanceState);
-//        mActionBarDrawerToggle.syncState();
-//    }
-
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
-//    }
-
     public void closeDrawer() {
         mDrawerLayout.closeDrawers();
     }
-
 
     // 用来计算返回键的点击间隔时间
     private long exitTime = 0;

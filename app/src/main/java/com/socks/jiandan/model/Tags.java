@@ -34,7 +34,20 @@ public class Tags implements Serializable {
 		}
 		return tags;
 	}
-
+    public static Tags parseCache(final JSONObject jsonObject) {
+        Tags tags;
+        if (jsonObject == null) {
+            tags = null;
+        } else {
+            tags = new Tags();
+            tags.id = jsonObject.optInt("id");
+            tags.slug = jsonObject.optString("slug");
+            tags.title = jsonObject.optString("title");
+            tags.description = jsonObject.optString("description");
+            tags.post_count = jsonObject.optInt("post_count");
+        }
+        return tags;
+    }
 	public int getId() {
 		return id;
 	}

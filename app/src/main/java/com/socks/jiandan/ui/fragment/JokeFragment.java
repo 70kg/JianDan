@@ -471,3 +471,5 @@ public class JokeFragment extends BaseFragment {
 		}
 	}
 }
+
+
