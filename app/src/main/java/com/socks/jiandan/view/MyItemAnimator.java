@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class MyItemAnimator extends RecyclerView.ItemAnimator {
 
-	List<RecyclerView.ViewHolder> mAnimationAddViewHolders = new ArrayList<RecyclerView.ViewHolder>();
-	List<RecyclerView.ViewHolder> mAnimationRemoveViewHolders = new ArrayList<RecyclerView.ViewHolder>();
+	List<RecyclerView.ViewHolder> mAnimationAddViewHolders = new ArrayList<>();
+	List<RecyclerView.ViewHolder> mAnimationRemoveViewHolders = new ArrayList<>();
 
 	//需要执行动画时会系统会调用，用户无需手动调用
 	@Override
@@ -34,7 +34,7 @@ public class MyItemAnimator extends RecyclerView.ItemAnimator {
 				);
 
 				animator.setTarget(target);
-				animator.setDuration(100);
+				animator.setDuration(1000);
 				animator.addListener(new Animator.AnimatorListener() {
 					@Override
 					public void onAnimationStart(Animator animation) {

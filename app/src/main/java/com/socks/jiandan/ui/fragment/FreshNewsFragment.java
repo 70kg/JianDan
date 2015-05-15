@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,6 +38,7 @@ import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
+import com.socks.jiandan.view.SlideInOutBottomItemAnimator;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 
 import java.util.ArrayList;
@@ -84,7 +84,7 @@ public class FreshNewsFragment extends BaseFragment {
 		ButterKnife.inject(this, view);
 
 		mRecyclerView.setHasFixedSize(false);
-		mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+		mRecyclerView.setItemAnimator(new SlideInOutBottomItemAnimator(mRecyclerView));
 		mLoadFinisCallBack = mRecyclerView;
 		mRecyclerView.setLoadMoreListener(new AutoLoadRecyclerView.onLoadMoreListener() {
 			@Override
@@ -244,7 +244,7 @@ public class FreshNewsFragment extends BaseFragment {
 					}
 				});
 
-				setAnimation(holder.card, position);
+				//setAnimation(holder.card, position);
 			} else {
 				holder.ll_content.setOnClickListener(new View.OnClickListener() {
 					@Override
@@ -255,7 +255,7 @@ public class FreshNewsFragment extends BaseFragment {
 						startActivity(intent);
 					}
 				});
-				setAnimation(holder.ll_content, position);
+				//setAnimation(holder.ll_content, position);
 			}
 
 		}
