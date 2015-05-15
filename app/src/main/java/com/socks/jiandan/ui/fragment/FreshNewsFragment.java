@@ -244,7 +244,7 @@ public class FreshNewsFragment extends BaseFragment {
 					}
 				});
 
-				//setAnimation(holder.card, position);
+				setAnimation(holder.card, position);
 			} else {
 				holder.ll_content.setOnClickListener(new View.OnClickListener() {
 					@Override
@@ -255,7 +255,7 @@ public class FreshNewsFragment extends BaseFragment {
 						startActivity(intent);
 					}
 				});
-				//setAnimation(holder.ll_content, position);
+				setAnimation(holder.ll_content, position);
 			}
 
 		}
