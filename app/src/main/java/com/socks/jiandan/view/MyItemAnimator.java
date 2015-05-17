@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class MyItemAnimator extends RecyclerView.ItemAnimator {
 
-	List<RecyclerView.ViewHolder> mAnimationAddViewHolders = new ArrayList<>();
-	List<RecyclerView.ViewHolder> mAnimationRemoveViewHolders = new ArrayList<>();
+	List<RecyclerView.ViewHolder> mAnimationAddViewHolders = new ArrayList<RecyclerView.ViewHolder>();
+	List<RecyclerView.ViewHolder> mAnimationRemoveViewHolders = new ArrayList<RecyclerView.ViewHolder>();
 
 	//需要执行动画时会系统会调用，用户无需手动调用
 	@Override

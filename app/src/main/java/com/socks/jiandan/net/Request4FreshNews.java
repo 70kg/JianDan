@@ -5,6 +5,7 @@ import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.google.gson.Gson;
 import com.socks.jiandan.model.Author;
 import com.socks.jiandan.model.CustomFields;
 import com.socks.jiandan.model.FreshNews;
@@ -21,54 +22,55 @@ import java.util.ArrayList;
  */
 public class Request4FreshNews extends Request<ArrayList<FreshNews>> {
 
-	private Response.Listener<ArrayList<FreshNews>> listener;
+    private Response.Listener<ArrayList<FreshNews>> listener;
+    private Gson mGson;
 
-	public Request4FreshNews(String url, Response.Listener<ArrayList<FreshNews>> listener,
-	                         Response.ErrorListener errorListener) {
-		super(Method.GET, url, errorListener);
-		this.listener = listener;
-	}
+    public Request4FreshNews(String url, Response.Listener<ArrayList<FreshNews>> listener,
+                             Response.ErrorListener errorListener) {
+        super(Method.GET, url, errorListener);
+        this.listener = listener;
+    }
 
-	@Override
-	protected Response<ArrayList<FreshNews>> parseNetworkResponse(NetworkResponse response) {
+    @Override
+    protected Response<ArrayList<FreshNews>> parseNetworkResponse(NetworkResponse response) {
 
-		try {
-			String resultStr = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-			JSONObject resultObj = new JSONObject(resultStr);
+        try {
+            String resultStr = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            JSONObject resultObj = new JSONObject(resultStr);
 
-			JSONArray postsArray = resultObj.optJSONArray("posts");
+            JSONArray postsArray = resultObj.optJSONArray("posts");
 
-			ArrayList<FreshNews> freshNewses = new ArrayList<>();
+            ArrayList<FreshNews> freshNewses = new ArrayList<FreshNews>();
 
-			for (int i = 0; i < postsArray.length(); i++) {
+            for (int i = 0; i < postsArray.length(); i++) {
 
-				FreshNews freshNews = new FreshNews();
-				JSONObject jsonObject = postsArray.getJSONObject(i);
+                FreshNews freshNews = new FreshNews();
+                JSONObject jsonObject = postsArray.getJSONObject(i);
 
-				freshNews.setId(jsonObject.optString("id"));
-				freshNews.setUrl(jsonObject.optString("url"));
-				freshNews.setTitle(jsonObject.optString("title"));
-				freshNews.setDate(jsonObject.optString("date"));
-				freshNews.setComment_count(jsonObject.optString("comment_count"));
-				freshNews.setAuthor(Author.parse(jsonObject.optJSONObject("author")));
-				freshNews.setCustomFields(CustomFields.parse(jsonObject.optJSONObject("custom_fields")));
-				freshNews.setTags(Tags.parse(jsonObject.optJSONArray("tags")));
+                freshNews.setId(jsonObject.optString("id"));
+                freshNews.setUrl(jsonObject.optString("url"));
+                freshNews.setTitle(jsonObject.optString("title"));
+                freshNews.setDate(jsonObject.optString("date"));
+                freshNews.setComment_count(jsonObject.optString("comment_count"));
+                freshNews.setAuthor(Author.parse(jsonObject.optJSONObject("author")));
+                freshNews.setCustomFields(CustomFields.parse(jsonObject.optJSONObject("custom_fields")));
+                freshNews.setTags(Tags.parse(jsonObject.optJSONArray("tags")));
 
-				freshNewses.add(freshNews);
+                freshNewses.add(freshNews);
 
-			}
+            }
 
-			return Response.success(freshNewses, HttpHeaderParser.parseCacheHeaders(response));
+            return Response.success(freshNewses, HttpHeaderParser.parseCacheHeaders(response));
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Response.error(new ParseError(e));
-		}
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.error(new ParseError(e));
+        }
+    }
 
-	@Override
-	protected void deliverResponse(ArrayList<FreshNews> response) {
-		listener.onResponse(response);
-	}
+    @Override
+    protected void deliverResponse(ArrayList<FreshNews> response) {
+        listener.onResponse(response);
+    }
 
 }

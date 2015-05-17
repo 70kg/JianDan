@@ -12,7 +12,8 @@ import java.util.ArrayList;
  */
 public class FreshNews implements Serializable {
 
-    public static final String URL_FRESH_NEWS = "http://jandan.net/?oxwlxojflwblxbsapi=get_recent_posts&include=url,date,tags,author,title,comment_count,custom_fields&custom_fields=thumb_c,views&dev=1&page=";
+    public static final String URL_FRESH_NEWS = "http://jandan.net/?oxwlxojflwblxbsapi=get_recent_posts&include=u" +
+            "rl,date,tags,author,title,comment_count,custom_fields&custom_fields=thumb_c,views&dev=1&page=";
 
     public static final String URL_DRESH_NEWS_DETAIL = "http://i.jandan.net/?oxwlxojflwblxbsapi=get_post&include=content&id=";
 
@@ -62,7 +63,7 @@ public class FreshNews implements Serializable {
 
     public static ArrayList<FreshNews> parse(JSONArray postsArray) {
 
-        ArrayList<FreshNews> freshNewses = new ArrayList<>();
+        ArrayList<FreshNews> freshNewses = new ArrayList<FreshNews>();
 
         for (int i = 0; i < postsArray.length(); i++) {
 
@@ -87,7 +88,7 @@ public class FreshNews implements Serializable {
 
     public static ArrayList<FreshNews> parseCache(JSONArray postsArray) {
 
-        ArrayList<FreshNews> freshNewses = new ArrayList<>();
+        ArrayList<FreshNews> freshNewses = new ArrayList<FreshNews>();
 
         for (int i = 0; i < postsArray.length(); i++) {
 

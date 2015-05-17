@@ -33,7 +33,7 @@ public class Request4CommentCounts extends Request<ArrayList<CommentNumber>> {
 
 			JSONObject jsonObject = new JSONObject(jsonStr).getJSONObject("response");
 			String[] comment_IDs = getUrl().split("\\=")[1].split("\\,");
-			ArrayList<CommentNumber> commentNumbers = new ArrayList<>();
+			ArrayList<CommentNumber> commentNumbers = new ArrayList<CommentNumber>();
 
 			for (String comment_ID : comment_IDs) {
 
