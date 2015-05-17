@@ -31,7 +31,6 @@ import com.socks.jiandan.cache.FreshNewsCacheUtil;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.FreshNews;
-import com.socks.jiandan.net.GsonRequest;
 import com.socks.jiandan.net.JSONParser;
 import com.socks.jiandan.net.Request4FreshNews;
 import com.socks.jiandan.ui.FreshNewsDetailActivity;
@@ -39,7 +38,6 @@ import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
-import com.socks.jiandan.view.SlideInOutBottomItemAnimator;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 
 import java.util.ArrayList;
@@ -85,7 +83,7 @@ public class FreshNewsFragment extends BaseFragment {
         ButterKnife.inject(this, view);
 
         mRecyclerView.setHasFixedSize(false);
-        mRecyclerView.setItemAnimator(new SlideInOutBottomItemAnimator(mRecyclerView));
+       // mRecyclerView.setItemAnimator(new SlideInOutBottomItemAnimator(mRecyclerView));
         mLoadFinisCallBack = mRecyclerView;
         mRecyclerView.setLoadMoreListener(new AutoLoadRecyclerView.onLoadMoreListener() {
             @Override
@@ -228,6 +226,7 @@ public class FreshNewsFragment extends BaseFragment {
             holder.tv_views.setText("浏览" + freshNews.getCustomFields().getViews() + "次");
 
             if (isLargeMode) {
+                //如果是加载大图
                 holder.tv_share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -315,6 +314,7 @@ public class FreshNewsFragment extends BaseFragment {
                     }
                 }));
             } else {
+                //没有网络加载本地数据
                 google_progress.setVisibility(View.GONE);
                 mLoadFinisCallBack.loadFinish(null);
                 if (mSwipeRefreshLayout.isRefreshing()) {
@@ -332,58 +332,7 @@ public class FreshNewsFragment extends BaseFragment {
 
         }
 
-        private void loadDataByNetworkType1() {
 
-            if (NetWorkUtil.isNetWorkConnected(getActivity())) {
-                executeRequest(new GsonRequest<FreshNews>(FreshNews.getUrlFreshNews(page), FreshNews.class,
-                        new Response.Listener<FreshNews>() {
-                            @Override
-                            public void onResponse(FreshNews response) {
-                                google_progress.setVisibility(View.GONE);
-                                mLoadFinisCallBack.loadFinish(null);
-                                if (mSwipeRefreshLayout.isRefreshing()) {
-                                    mSwipeRefreshLayout.setRefreshing(false);
-                                }
-
-                                if (page == 1) {
-                                    mAdapter.mFreshNews.clear();
-                                    FreshNewsCacheUtil.getInstance(getActivity()).clearAllCache();
-                                }
-
-                                mAdapter.mFreshNews.add(response);
-                                notifyDataSetChanged();
-
-                                FreshNewsCacheUtil.getInstance(getActivity()).addResultCache(JSONParser.toString(response),
-                                        page);
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        ShowToast.Short(ToastMsg.LOAD_FAILED);
-                        google_progress.setVisibility(View.GONE);
-                        mLoadFinisCallBack.loadFinish(null);
-                        if (mSwipeRefreshLayout.isRefreshing()) {
-                            mSwipeRefreshLayout.setRefreshing(false);
-                        }
-                    }
-                }));
-            } else {
-                google_progress.setVisibility(View.GONE);
-                mLoadFinisCallBack.loadFinish(null);
-                if (mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-
-                if (page == 1) {
-                    mFreshNews.clear();
-                    ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
-                }
-
-                mFreshNews.addAll(FreshNewsCacheUtil.getInstance(getActivity()).getCacheByPage(page));
-                notifyDataSetChanged();
-            }
-
-        }
     }
 
 

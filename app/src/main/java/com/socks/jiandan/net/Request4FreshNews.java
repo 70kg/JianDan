@@ -5,7 +5,6 @@ import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.google.gson.Gson;
 import com.socks.jiandan.model.Author;
 import com.socks.jiandan.model.CustomFields;
 import com.socks.jiandan.model.FreshNews;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 public class Request4FreshNews extends Request<ArrayList<FreshNews>> {
 
     private Response.Listener<ArrayList<FreshNews>> listener;
-    private Gson mGson;
 
     public Request4FreshNews(String url, Response.Listener<ArrayList<FreshNews>> listener,
                              Response.ErrorListener errorListener) {
