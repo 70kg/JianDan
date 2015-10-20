@@ -1,6 +1,16 @@
 # JianDan客户端高仿版
 ---
 
+这个是Fork了凯子哥的煎蛋，我进行了侧边栏简单的Material Design适配。详情见MyJiandan分支
+![](https://github.com/70kg/JianDan/blob/MyJianDan/Screenshots/jiandan_1.png)
+
+![](https://github.com/70kg/JianDan/blob/MyJianDan/Screenshots/jiandan_2.png)
+
+感谢凯子哥！
+
+
+---
+
 ##项目介绍
 
 2015-4-10
